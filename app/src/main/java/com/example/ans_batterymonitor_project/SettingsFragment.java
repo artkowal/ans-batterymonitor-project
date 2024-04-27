@@ -1,6 +1,7 @@
 package com.example.ans_batterymonitor_project;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -21,7 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,6 +44,8 @@ public class SettingsFragment extends Fragment {
     private BluetoothLeScanner bluetoothLeScanner;
     private boolean scanning;
     private Handler handler = new Handler();
+    private ArrayList<String> deviceList = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -92,6 +98,31 @@ public class SettingsFragment extends Fragment {
         scanButton.setOnClickListener(v -> {
             startBleScan();
         });
+
+        ListView deviceListView = view.findViewById(R.id.deviceListView);
+        adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, deviceList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = view.findViewById(android.R.id.text1);
+
+                String deviceInfo = deviceList.get(position);
+                textView.setText(deviceInfo); // Nazwa urządzenia - Adres MAC
+
+                return view;
+            }
+        };
+        deviceListView.setAdapter(adapter);
+
+        deviceListView.setOnItemClickListener((parent, view1, position, id) -> {
+            String deviceInfo = deviceList.get(position);
+            String[] deviceParts = deviceInfo.split("-");
+            if (deviceParts.length >= 2) {
+                String deviceAddress = deviceParts[1].trim(); // Adres MAC
+                Toast.makeText(requireContext(), "MAC Address: " + deviceAddress, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 
@@ -166,7 +197,13 @@ public class SettingsFragment extends Fragment {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
-                    Log.d("SCANNING", result.getDevice() + " " + Objects.requireNonNull(result.getScanRecord()).getDeviceName());
+                    BluetoothDevice device = result.getDevice();
+                    String deviceInfo = device.getName() + " - " + device.getAddress();
+                    if (device.getName() != null && !deviceList.contains(deviceInfo)) {
+                        deviceList.add(deviceInfo);
+                        adapter.notifyDataSetChanged();
+                    }
+                    Log.d("SCANNING", "Device found: " + deviceInfo);
                 }
             };
 
