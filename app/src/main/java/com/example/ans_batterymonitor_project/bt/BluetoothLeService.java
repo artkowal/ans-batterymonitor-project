@@ -103,19 +103,6 @@ public class BluetoothLeService extends Service {
         return bluetoothGatt.getServices();
     }
 
-    public void printGattTable() {
-        if (bluetoothGatt == null) {
-            Log.e(TAG, "BluetoothGatt is null");
-            return;
-        }
-        for (BluetoothGattService service : bluetoothGatt.getServices()) {
-            Log.i(TAG, "Service UUID: " + service.getUuid());
-            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                Log.i(TAG, "Characteristic UUID: " + characteristic.getUuid());
-            }
-        }
-    }
-
     private void sendData(String data) {
         if (bluetoothGatt == null) {
             Log.e(TAG, "BluetoothGatt is null");

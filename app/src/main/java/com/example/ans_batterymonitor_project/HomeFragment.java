@@ -103,8 +103,10 @@ public class HomeFragment extends Fragment {
                 showToast("Device Not Connected!");
                 return;
             }
-            // TODO
+
+            // Połączenie istnieje
             bluetoothLeService.sendMeasurementRequestStart();
+            // TODO Wyświetlanie danych
         });
 
         updateUI(view);
