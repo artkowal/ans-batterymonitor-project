@@ -42,6 +42,9 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothGatt bluetoothGatt;
 
+    BluetoothGattService service = null;
+    BluetoothGattCharacteristic characteristic = null;
+
     public boolean initialize() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
@@ -103,21 +106,43 @@ public class BluetoothLeService extends Service {
         return bluetoothGatt.getServices();
     }
 
+//    public void receiveFloat() {
+//        if (bluetoothGatt == null) {
+//            Log.e(TAG, "BluetoothGatt is null");
+//            return;
+//        }
+//        BluetoothGattService service = bluetoothGatt.getService(UUID_HM10_SERVICE);
+//        if (service == null) {
+//            Log.e(TAG, "Service not found");
+//            return;
+//        }
+//        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID_HM10_CHARACTERISTIC);
+//        if (characteristic == null) {
+//            Log.e(TAG, "Characteristic not found");
+//            return;
+//        }
+//
+//        bluetoothGatt.readCharacteristic(characteristic);
+//    }
+
     private void sendData(String data) {
-        if (bluetoothGatt == null) {
-            Log.e(TAG, "BluetoothGatt is null");
-            return;
-        }
-        BluetoothGattService service = bluetoothGatt.getService(UUID_HM10_SERVICE);
-        if (service == null) {
-            Log.e(TAG, "Service not found");
-            return;
-        }
-        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID_HM10_CHARACTERISTIC);
         if (characteristic == null) {
-            Log.e(TAG, "Characteristic not found");
-            return;
+            if (bluetoothGatt == null) {
+                Log.e(TAG, "BluetoothGatt is null");
+                return;
+            }
+            service = bluetoothGatt.getService(UUID_HM10_SERVICE);
+            if (service == null) {
+                Log.e(TAG, "Service not found");
+                return;
+            }
+            characteristic = service.getCharacteristic(UUID_HM10_CHARACTERISTIC);
+            if (characteristic == null) {
+                Log.e(TAG, "Characteristic not found");
+                return;
+            }
         }
+
         characteristic.setValue(data.getBytes(Charset.forName("UTF-8")));
         bluetoothGatt.writeCharacteristic(characteristic);
     }
