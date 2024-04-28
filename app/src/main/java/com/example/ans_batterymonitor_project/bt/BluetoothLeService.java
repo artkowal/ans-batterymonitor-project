@@ -27,6 +27,11 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
             "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+    public final static String ACTION_DATA_AVAILABLE =
+            "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
+
+    public final static UUID UUID_HM10_SERVICE = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
+    public final static UUID UUID_HM10_CHARACTERISTIC = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED = 2;
@@ -111,23 +116,31 @@ public class BluetoothLeService extends Service {
         }
     }
 
-    public void sendData(String data) {
+    private void sendData(String data) {
         if (bluetoothGatt == null) {
             Log.e(TAG, "BluetoothGatt is null");
             return;
         }
-        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb"));
+        BluetoothGattService service = bluetoothGatt.getService(UUID_HM10_SERVICE);
         if (service == null) {
             Log.e(TAG, "Service not found");
             return;
         }
-        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb"));
+        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID_HM10_CHARACTERISTIC);
         if (characteristic == null) {
             Log.e(TAG, "Characteristic not found");
             return;
         }
         characteristic.setValue(data.getBytes(Charset.forName("UTF-8")));
         bluetoothGatt.writeCharacteristic(characteristic);
+    }
+
+    public void sendMeasurementRequestStart() {
+        sendData("s");
+    }
+
+    public void sendMeasurementRequestStop() {
+        sendData("p");
     }
 
     public boolean isConnected() {
@@ -141,6 +154,7 @@ public class BluetoothLeService extends Service {
     }
 
     public boolean disconnect() {
+        sendMeasurementRequestStop();
         return close();
     }
 

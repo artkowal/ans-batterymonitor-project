@@ -104,9 +104,7 @@ public class HomeFragment extends Fragment {
                 return;
             }
             // TODO
-            Log.d(TAG, bluetoothLeService.getSupportedGattServices().toString());
-            bluetoothLeService.printGattTable();
-            bluetoothLeService.sendData("s");
+            bluetoothLeService.sendMeasurementRequestStart();
         });
 
         updateUI(view);
