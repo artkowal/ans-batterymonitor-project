@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
@@ -14,7 +15,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.UUID;
 
 public class BluetoothLeService extends Service {
 
@@ -93,6 +96,38 @@ public class BluetoothLeService extends Service {
     public List<BluetoothGattService> getSupportedGattServices() {
         if (bluetoothGatt == null) return null;
         return bluetoothGatt.getServices();
+    }
+
+    public void printGattTable() {
+        if (bluetoothGatt == null) {
+            Log.e(TAG, "BluetoothGatt is null");
+            return;
+        }
+        for (BluetoothGattService service : bluetoothGatt.getServices()) {
+            Log.i(TAG, "Service UUID: " + service.getUuid());
+            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                Log.i(TAG, "Characteristic UUID: " + characteristic.getUuid());
+            }
+        }
+    }
+
+    public void sendData(String data) {
+        if (bluetoothGatt == null) {
+            Log.e(TAG, "BluetoothGatt is null");
+            return;
+        }
+        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb"));
+        if (service == null) {
+            Log.e(TAG, "Service not found");
+            return;
+        }
+        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb"));
+        if (characteristic == null) {
+            Log.e(TAG, "Characteristic not found");
+            return;
+        }
+        characteristic.setValue(data.getBytes(Charset.forName("UTF-8")));
+        bluetoothGatt.writeCharacteristic(characteristic);
     }
 
     public boolean isConnected() {
