@@ -70,7 +70,6 @@ public class BluetoothLeService extends Service {
                 // disconnected from the GATT Server
                 connectionState = STATE_DISCONNECTED;
                 broadcastUpdate(ACTION_GATT_DISCONNECTED);
-                close();
             }
         }
     };
@@ -86,20 +85,17 @@ public class BluetoothLeService extends Service {
     }
 
     public boolean disconnect() {
-        if (bluetoothGatt == null) {
-            Log.w(TAG, "BluetoothGatt not initialized");
-            return false;
-        }
-        bluetoothGatt.disconnect();
-        return true;
+        return close();
     }
 
-    private void close() {
+    private boolean close() {
         if (bluetoothGatt == null) {
-            return;
+            return true;
         }
         bluetoothGatt.close();
         bluetoothGatt = null;
+        connectionState = STATE_DISCONNECTED; // "HACK."
+        return true;
     }
 
     private Binder binder = new LocalBinder();
