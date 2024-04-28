@@ -1,5 +1,6 @@
 package com.example.ans_batterymonitor_project;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +23,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    public BluetoothLeService bluetoothLeService;
+    private final String TAG = "HomeFragment";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,10 +67,50 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateUI(View view) {
+        TextView connectButton = view.findViewById(R.id.connectButton);
+        TextView connectionTextView = view.findViewById(R.id.connectionTextView);
+        ImageView connectionImageView = view.findViewById(R.id.connectionImageView);
+
+        if (bluetoothLeService.isConnected()) {
+            connectButton.setVisibility(View.INVISIBLE);
+            connectionTextView.setText("Connected");
+            connectionImageView.setImageResource(R.drawable.ic_yes_512);
+        } else {
+            connectButton.setVisibility(View.VISIBLE);
+            connectionTextView.setText("No connection");
+            connectionImageView.setImageResource(R.drawable.ic_no_512);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        bluetoothLeService = MainActivity.bluetoothLeService;
+
+        updateUI(view);
+
+        Button connectButton = view.findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(v -> {
+            ((MainActivity) requireActivity()).goToSetting();
+        });
+
+        Button startButton = view.findViewById(R.id.startButton);
+        startButton.setOnClickListener(v -> {
+            if(!bluetoothLeService.isConnected()) {
+                showToast("Device Not Connected!");
+                return;
+            }
+            // TODO
+        });
+
+        return view;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

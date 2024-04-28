@@ -49,4 +49,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+    public void goToSetting() {
+        replaceFragment(new SettingsFragment());
+        binding.bottomNavigationView.setSelectedItemId(R.id.setting);
+    }
 }
