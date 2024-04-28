@@ -1,5 +1,6 @@
 package com.example.ans_batterymonitor_project;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -24,11 +25,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
+import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 
@@ -91,15 +94,51 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateUI(View view, boolean connected) {
+        TextView connectButton = view.findViewById(R.id.connectButton);
+        TextView connectionTextView = view.findViewById(R.id.connectionTextView);
+        ImageView connectionImageView = view.findViewById(R.id.connectionImageView);
+
+        if (connected || bluetoothLeService.isConnected()) {
+            connectButton.setText("DISCONNECT");
+            connectButton.setVisibility(View.VISIBLE);
+            connectionTextView.setText("Connected successfully");
+            connectionImageView.setImageResource(R.drawable.ic_yes_512);
+        } else {
+            connectButton.setVisibility(View.INVISIBLE);
+            connectionTextView.setText("Connection failed");
+            connectionImageView.setImageResource(R.drawable.ic_no_512);
+        }
+    }
+
+    private void connectOrDisconnect(View view) {
+        Log.d(TAG, "conn button clicked");
+        if(bluetoothLeService.isConnected()) {
+            if (bluetoothLeService.disconnect()) {
+                updateUI(view, false);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        bluetoothLeService = MainActivity.bluetoothLeService;
+
+        updateUI(view, false);
+
         Button scanButton = view.findViewById(R.id.scanButton);
         scanButton.setOnClickListener(v -> {
             startBleScan();
+        });
+
+        Button connectButton = view.findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(v -> {
+            connectOrDisconnect(view);
         });
 
         ListView deviceListView = view.findViewById(R.id.deviceListView);
@@ -123,16 +162,14 @@ public class SettingsFragment extends Fragment {
             if (deviceParts.length >= 2) {
                 String deviceName = deviceParts[0].trim(); // Nazwa
                 String deviceAddress = deviceParts[1].trim(); // Adres MAC
-                showToast("Device: " + deviceName);
+//                showToast("Device: " + deviceName);
 
                 if (scanning) {
                     stopBleScan();
                 }
 
-                if (bluetoothLeService == null) {
-                    bluetoothLeService = new BluetoothLeService();
-                } else {
-                    bluetoothLeService.disconnect();
+                if (bluetoothLeService.isConnected()) {
+                    boolean ok = bluetoothLeService.disconnect();
                 }
 
                 if (!bluetoothLeService.initialize()) {
@@ -140,17 +177,15 @@ public class SettingsFragment extends Fragment {
                     return;
                 }
 
-                bluetoothLeService.connect(deviceAddress);
-//
-//                if (bluetoothController.isConnected()) {
-//                    Toast.makeText(requireContext(), "Connected to device: " + deviceName, Toast.LENGTH_SHORT).show();
-////                    showToast("Connected to device: " + deviceName);
-//                    // Połączenie działa
-//                    //
-//                    //
-//                } else {
-//                    Toast.makeText(requireContext(), "Failed to connect to device: " + deviceName, Toast.LENGTH_SHORT).show();
-//                }
+                if (bluetoothLeService.connect(deviceAddress)) {
+                    showToast("Connected to device: " + deviceName);
+                    // Połączenie działa
+                    updateUI(view, true);
+                    //
+                } else {
+                    updateUI(view, false);
+                    showToast("Failed to connect to device: " + deviceName);
+                }
             }
         });
 
@@ -242,7 +277,7 @@ public class SettingsFragment extends Fragment {
         if (bluetoothLeScanner != null && scanning) {
             bluetoothLeScanner.stopScan(leScanCallback);
             scanning = false;
-            showToast("BLE Scan Stopped");
+            Log.d(TAG, "BLE Scan Stopped");
         }
     }
     private void showToast(String message) {

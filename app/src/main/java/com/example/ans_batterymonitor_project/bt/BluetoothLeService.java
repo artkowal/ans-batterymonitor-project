@@ -74,22 +74,28 @@ public class BluetoothLeService extends Service {
         }
     };
 
+    public boolean isConnected() {
+        return connectionState == STATE_CONNECTED;
+    }
+
     @Override
     public boolean onUnbind(Intent intent) {
         close();
         return super.onUnbind(intent);
     }
 
-    public void disconnect() {
-        close();
+    public boolean disconnect() {
+        return close();
     }
 
-    private void close() {
+    private boolean close() {
         if (bluetoothGatt == null) {
-            return;
+            return true;
         }
         bluetoothGatt.close();
         bluetoothGatt = null;
+        connectionState = STATE_DISCONNECTED; // "HACK"
+        return true;
     }
 
     private Binder binder = new LocalBinder();

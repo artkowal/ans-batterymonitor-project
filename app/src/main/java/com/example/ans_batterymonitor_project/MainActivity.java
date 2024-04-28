@@ -7,15 +7,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
 import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
+    public static BluetoothLeService bluetoothLeService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bluetoothLeService = new BluetoothLeService();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());

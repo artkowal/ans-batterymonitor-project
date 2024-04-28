@@ -32,12 +32,43 @@
     <ListView
         android:id="@+id/deviceListView"
         android:layout_width="0dp"
-        android:layout_height="285dp"
+        android:layout_height="194dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanButton" />
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="CONNECT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceListView" />
+
+    <ImageView
+        android:id="@+id/connectionImageView"
+        android:layout_width="181dp"
+        android:layout_height="118dp"
+        android:layout_marginBottom="64dp"
+        android:src="@drawable/ic_no_512"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/connectionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connection Status"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/connectionImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
