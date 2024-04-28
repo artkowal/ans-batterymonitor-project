@@ -28,8 +28,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +38,8 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
+    public BluetoothLeService bluetoothLeService;
+    private final String TAG = "SettingsFragment";
     private static final long SCAN_PERIOD = 10000;
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 2;
@@ -118,8 +121,36 @@ public class SettingsFragment extends Fragment {
             String deviceInfo = deviceList.get(position);
             String[] deviceParts = deviceInfo.split("-");
             if (deviceParts.length >= 2) {
+                String deviceName = deviceParts[0].trim(); // Nazwa
                 String deviceAddress = deviceParts[1].trim(); // Adres MAC
-                Toast.makeText(requireContext(), "MAC Address: " + deviceAddress, Toast.LENGTH_SHORT).show();
+                showToast("Device: " + deviceName);
+
+                if (scanning) {
+                    stopBleScan();
+                }
+
+                if (bluetoothLeService == null) {
+                    bluetoothLeService = new BluetoothLeService();
+                } else {
+                    bluetoothLeService.disconnect();
+                }
+
+                if (!bluetoothLeService.initialize()) {
+                    Log.e(TAG, "Unable to initialize Bluetooth");
+                    return;
+                }
+
+                bluetoothLeService.connect(deviceAddress);
+//
+//                if (bluetoothController.isConnected()) {
+//                    Toast.makeText(requireContext(), "Connected to device: " + deviceName, Toast.LENGTH_SHORT).show();
+////                    showToast("Connected to device: " + deviceName);
+//                    // Połączenie działa
+//                    //
+//                    //
+//                } else {
+//                    Toast.makeText(requireContext(), "Failed to connect to device: " + deviceName, Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 
