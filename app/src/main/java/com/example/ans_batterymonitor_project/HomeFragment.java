@@ -91,8 +91,6 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         bluetoothLeService = MainActivity.bluetoothLeService;
 
-        updateUI(view);
-
         Button connectButton = view.findViewById(R.id.connectButton);
         connectButton.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).goToSetting();
@@ -107,6 +105,7 @@ public class HomeFragment extends Fragment {
             // TODO
         });
 
+        updateUI(view);
         return view;
     }
 

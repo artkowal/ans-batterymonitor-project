@@ -14,13 +14,11 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
-    public static BluetoothLeService bluetoothLeService;
+    public final static BluetoothLeService bluetoothLeService = new BluetoothLeService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        bluetoothLeService = new BluetoothLeService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

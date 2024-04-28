@@ -129,8 +129,6 @@ public class SettingsFragment extends Fragment {
 
         bluetoothLeService = MainActivity.bluetoothLeService;
 
-        updateUI(view, false);
-
         Button scanButton = view.findViewById(R.id.scanButton);
         scanButton.setOnClickListener(v -> {
             startBleScan();
@@ -189,6 +187,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        updateUI(view, false);
         return view;
     }
 
