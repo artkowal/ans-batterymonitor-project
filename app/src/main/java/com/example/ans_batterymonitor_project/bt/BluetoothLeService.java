@@ -105,6 +105,7 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 BluetoothGattService service = gatt.getService(UUID_HM10_SERVICE);
+                sendMeasurementRequestStart();
                 if (service != null) {
                     BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID_HM10_CHARACTERISTIC);
                     if (characteristic != null) {

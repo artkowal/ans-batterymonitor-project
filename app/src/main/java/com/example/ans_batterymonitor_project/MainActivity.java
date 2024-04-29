@@ -18,6 +18,13 @@ public class MainActivity extends AppCompatActivity implements DataListener {
 
     public final static BluetoothLeService bluetoothLeService = new BluetoothLeService();
 
+    private int ACTIVE_FRAGMENT = 0;
+    private final int FRAGMENT_HOME = 1;
+    private final int FRAGMENT_MEASUREMENT = 2;
+    private final int FRAGMENT_HISTORY = 3;
+    private final int FRAGMENT_SETTINGS = 4;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +59,11 @@ public class MainActivity extends AppCompatActivity implements DataListener {
     }
 
     public void handleData(float number) {
-        final String TAG = "MainActivity";
-        Log.d(TAG, String.valueOf(number));
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+        if (currentFragment instanceof HomeFragment) {
+            HomeFragment homeFragment = (HomeFragment) currentFragment;
+            homeFragment.handleDataInFragment(number);
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
