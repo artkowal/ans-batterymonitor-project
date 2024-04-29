@@ -6,11 +6,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
+import com.example.ans_batterymonitor_project.bt.DataListener;
 import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataListener {
 
     ActivityMainBinding binding;
 
@@ -39,6 +41,19 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+
+        bluetoothLeService.setDataListener(this);
+    }
+
+    @Override
+    public void onDataReceived(float data) {
+        // Obsługa odebranych danych
+        handleData(data);
+    }
+
+    public void handleData(float number) {
+        final String TAG = "MainActivity";
+        Log.d(TAG, String.valueOf(number));
     }
 
     private void replaceFragment(Fragment fragment) {

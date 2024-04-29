@@ -49,6 +49,12 @@ public class BluetoothLeService extends Service {
     BluetoothGattService service = null;
     BluetoothGattCharacteristic characteristic = null;
 
+    private DataListener dataListener;
+
+    public void setDataListener(DataListener listener) {
+        this.dataListener = listener;
+    }
+
     public boolean initialize() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
@@ -127,7 +133,9 @@ public class BluetoothLeService extends Service {
                     stringBuilder.append(String.format("%02X ", byteChar));
                 try {
                     float f = Float.parseFloat(new String(data));
-                    Log.d(TAG, String.valueOf(f));
+                    if(dataListener != null) {
+                        dataListener.onDataReceived(f);
+                    }
                 } catch (Exception ignored) {}
             }
         }
