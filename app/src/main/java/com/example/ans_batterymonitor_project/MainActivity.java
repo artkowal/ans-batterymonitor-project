@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements DataListener {
     ActivityMainBinding binding;
 
     public final static BluetoothLeService bluetoothLeService = new BluetoothLeService();
-
+    private boolean firstTime = true;
     private int ACTIVE_FRAGMENT = 0;
     private final int FRAGMENT_HOME = 1;
     private final int FRAGMENT_MEASUREMENT = 2;
@@ -50,6 +52,24 @@ public class MainActivity extends AppCompatActivity implements DataListener {
         });
 
         bluetoothLeService.setDataListener(this);
+
+        // Sprawdź, czy aplikacja została uruchomiona po raz pierwszy
+        SharedPreferences prefs = getSharedPreferences("com.example.ans_batterymonitor_project", MODE_PRIVATE);
+        firstTime = prefs.getBoolean("firstTime", true);
+
+        if (firstTime) {
+            // Uruchom SplashScreen po raz pierwszy
+            Intent intent = new Intent(MainActivity.this, SplashActivity.class);
+            startActivity(intent);
+            // Ustaw flagę firstTime na false, aby nie pokazać SplashScreena ponownie
+            prefs.edit().putBoolean("firstTime", false).apply();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Wyjście z aplikacji po naciśnięciu przycisku wstecz
+        moveTaskToBack(true);
     }
 
     @Override
