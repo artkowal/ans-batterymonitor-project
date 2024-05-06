@@ -13,6 +13,7 @@ import android.util.Log;
 import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
 import com.example.ans_batterymonitor_project.bt.DataListener;
 import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
+import com.example.ans_batterymonitor_project.measurement.Measurement;
 
 public class MainActivity extends AppCompatActivity implements DataListener {
 
@@ -20,12 +21,8 @@ public class MainActivity extends AppCompatActivity implements DataListener {
 
     public final static BluetoothLeService bluetoothLeService = new BluetoothLeService();
     private boolean firstTime = true;
-    private int ACTIVE_FRAGMENT = 0;
-    private final int FRAGMENT_HOME = 1;
-    private final int FRAGMENT_MEASUREMENT = 2;
-    private final int FRAGMENT_HISTORY = 3;
-    private final int FRAGMENT_SETTINGS = 4;
-
+    public Measurement measurement = null;
+    private boolean measurementIsActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +76,34 @@ public class MainActivity extends AppCompatActivity implements DataListener {
     }
 
     public void handleData(float number) {
+        Log.d("main", String.valueOf(number));
+        // Aktualizacja aktualnego pomiaru
+        if (measurementIsActive) {
+            measurement.addMeasurement(number);
+        }
+
+        // Aktualizacja UI
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
         if (currentFragment instanceof HomeFragment) {
             HomeFragment homeFragment = (HomeFragment) currentFragment;
             homeFragment.handleDataInFragment(number);
         }
+
+        if (currentFragment instanceof MeasurementFragment) {
+            MeasurementFragment measurementFragment = (MeasurementFragment) currentFragment;
+            measurementFragment.handleDataInFragment(number);
+
+            if (measurementIsActive) {
+                measurementFragment.handleMeasurementData(measurement.getDuration(), measurement.getMinVoltage(), measurement.getMaxVoltage(), measurement.getMovingAverage());
+            }
+        }
+    }
+
+    public void stopMeasurement() {
+        measurement = null;
+        measurementIsActive = false;
+
+        // TODO zapisywanie do JSONa
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -96,5 +116,14 @@ public class MainActivity extends AppCompatActivity implements DataListener {
     public void goToSetting() {
         replaceFragment(new SettingsFragment());
         binding.bottomNavigationView.setSelectedItemId(R.id.setting);
+    }
+
+    public void goToMeasurementAndStart() {
+        replaceFragment(new MeasurementFragment());
+        binding.bottomNavigationView.setSelectedItemId(R.id.measurement);
+
+        // Rozpoczęcie pomiaru
+        measurement = new Measurement();
+        measurementIsActive = true;
     }
 }

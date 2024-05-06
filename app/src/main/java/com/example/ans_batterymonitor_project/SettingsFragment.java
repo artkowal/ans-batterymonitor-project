@@ -118,6 +118,7 @@ public class SettingsFragment extends Fragment {
             if (bluetoothLeService.disconnect()) {
                 updateUI(view, false);
             }
+            ((MainActivity) requireActivity()).stopMeasurement();
         }
     }
 
