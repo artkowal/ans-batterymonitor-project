@@ -15,6 +15,8 @@ import com.example.ans_batterymonitor_project.bt.DataListener;
 import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
 import com.example.ans_batterymonitor_project.measurement.Measurement;
 
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity implements DataListener {
 
     ActivityMainBinding binding;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements DataListener {
     }
 
     public void handleData(float number) {
-        Log.d("main", String.valueOf(number));
+//        Log.d("main", String.valueOf(number));
         // Aktualizacja aktualnego pomiaru
         if (measurementIsActive) {
             measurement.addMeasurement(number);
@@ -99,11 +101,18 @@ public class MainActivity extends AppCompatActivity implements DataListener {
         }
     }
 
-    public void stopMeasurement() {
-        measurement = null;
-        measurementIsActive = false;
+    public void stopMeasurement() throws JSONException {
+        try {
+            if (measurement != null) {
+                measurement.finishMeasurement(this);
+            }
 
-        // TODO zapisywanie do JSONa
+            measurement = null;
+            measurementIsActive = false;
+        } catch (JSONException e) {
+            Log.e("MainActivity", e.toString());
+        }
+
     }
 
     private void replaceFragment(Fragment fragment) {

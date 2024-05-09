@@ -1,5 +1,12 @@
 package com.example.ans_batterymonitor_project.measurement;
 
+import android.content.Context;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Measurement {
@@ -84,5 +91,23 @@ public class Measurement {
 
     public boolean isPaused() {
         return pauseStartTime != 0;
+    }
+
+    public void finishMeasurement(Context context) throws JSONException {
+        // Tworzymy obiekt JSON zawierający dane pomiaru
+        try {
+            JSONObject measurementJSON = new JSONObject();
+            measurementJSON.put("date", new Date().toString());
+            measurementJSON.put("duration", getDuration());
+            measurementJSON.put("minVoltage", getMinVoltage());
+            measurementJSON.put("maxVoltage", getMaxVoltage());
+            measurementJSON.put("movingAverage", getMovingAverage());
+
+            // Dodajemy pomiar do historii pomiarów
+            MeasurementHistoryManager.addToHistory(measurementJSON, context);
+        } catch (JSONException e) {
+            Log.e("Measurement", e.toString());
+        }
+
     }
 }

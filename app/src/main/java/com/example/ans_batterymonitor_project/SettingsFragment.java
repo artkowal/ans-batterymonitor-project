@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.example.ans_batterymonitor_project.bt.BluetoothLeService;
 import com.example.ans_batterymonitor_project.databinding.ActivityMainBinding;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 /**
@@ -112,7 +114,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void connectOrDisconnect(View view) {
+    private void connectOrDisconnect(View view) throws JSONException {
         Log.d(TAG, "conn button clicked");
         if(bluetoothLeService.isConnected()) {
             if (bluetoothLeService.disconnect()) {
@@ -137,7 +139,11 @@ public class SettingsFragment extends Fragment {
 
         Button connectButton = view.findViewById(R.id.connectButton);
         connectButton.setOnClickListener(v -> {
-            connectOrDisconnect(view);
+            try {
+                connectOrDisconnect(view);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         ListView deviceListView = view.findViewById(R.id.deviceListView);
