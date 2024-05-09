@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.example.ans_batterymonitor_project.measurement.Measurement;
 
+import org.json.JSONException;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MeasurementFragment#newInstance} factory method to
@@ -71,6 +73,7 @@ public class MeasurementFragment extends Fragment {
 
         Measurement measurement = ((MainActivity) requireActivity()).measurement;
         Button pauseButton = view.findViewById(R.id.pauseButton);
+        Button stopButton = view.findViewById(R.id.stopButton);
 
         if (measurement != null) {
             if (measurement.isPaused()) {
@@ -92,7 +95,13 @@ public class MeasurementFragment extends Fragment {
             }
         });
 
-        // TODO przycisk stop (kończenie pomiaru)
+        stopButton.setOnClickListener(v -> {
+            try {
+                ((MainActivity) requireActivity()).stopMeasurement();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return view;
     }
