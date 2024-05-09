@@ -4,9 +4,22 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.ans_batterymonitor_project.measurement.MeasurementHistoryManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +72,37 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        ///////// POBIERANIE DANYCH Z PLIKU JSON //////////////
+        JSONArray historyJson = MeasurementHistoryManager.loadHistory(requireContext());
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        try {
+            for (int i = 0; i < historyJson.length(); i++) {
+                JSONObject item = historyJson.getJSONObject(i);
+                String dateString = (String) item.get("date");
+                Date date = inputFormat.parse(dateString);
+
+                String formattedDate = outputFormat.format(date);
+                String duration = (String) item.get("duration");
+                String minVoltage = (String) item.get("minVoltage");
+                String maxVoltage = (String) item.get("maxVoltage");
+                String movingAverage = (String) item.get("movingAverage");
+
+                ///////// Wyświetlanie do usunięcie później //////////
+                Log.d("History Fragment", "Formatted Date: " + formattedDate);
+                Log.d("History Fragment", "Duration: " + duration);
+                Log.d("History Fragment", "MinVoltage: " + minVoltage);
+                Log.d("History Fragment", "MaxVoltage: " + maxVoltage);
+                Log.d("History Fragment", "MovingAverage: " + movingAverage);
+            }
+        } catch (JSONException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+        ///////// POBIERANIE DANYCH Z PLIKU JSON //////////////
+
+
+        return view;
     }
 }
