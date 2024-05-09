@@ -10,6 +10,7 @@
         android:id="@+id/frame_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +22,11 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/main"
+        android:fontFamily="@font/inriasansbold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
