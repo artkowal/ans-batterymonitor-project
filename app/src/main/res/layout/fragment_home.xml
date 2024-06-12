@@ -15,6 +15,8 @@
         android:layout_marginTop="32dp"
         android:text="Connection"
         android:textSize="26dp"
+        android:fontFamily="@font/inriasansbold"
+        android:textColor="@color/dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +29,8 @@
         android:layout_marginBottom="24dp"
         android:text="Current Voltage"
         android:textSize="26dp"
+        android:fontFamily="@font/inriasansbold"
+        android:textColor="@color/dark"
         app:layout_constraintBottom_toTopOf="@+id/voltageTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -49,26 +53,36 @@
         android:layout_marginTop="12dp"
         android:text="Connection Status"
         android:textSize="16sp"
+        android:fontFamily="@font/inriasansbold"
+        android:textColor="@color/dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectionImageView" />
 
     <Button
         android:id="@+id/connectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:text="CONNECT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectionTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/connectionTextView"
+        android:text="CONNECT"
+        android:textSize="24dp"
+        android:fontFamily="@font/inriasansbold"
+        android:background="@drawable/roundstyle"
+        android:theme="@style/ButtonDark" />
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/roundstyle"
+        android:fontFamily="@font/inriasansbold"
         android:text="START"
+        android:textSize="24dp"
+        android:theme="@style/ButtonLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -80,6 +94,8 @@
         android:layout_marginBottom="32dp"
         android:text="__.__"
         android:textSize="48dp"
+        android:fontFamily="@font/inriasansbold"
+        android:textColor="@color/yellow"
         app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

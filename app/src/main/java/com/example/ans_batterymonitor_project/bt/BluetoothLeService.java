@@ -133,7 +133,12 @@ public class BluetoothLeService extends Service {
                 for(byte byteChar : data)
                     stringBuilder.append(String.format("%02X ", byteChar));
                 try {
-                    float f = Float.parseFloat(new String(data));
+                    // Convert byte array to string
+                    String dataString = new String(data);
+                    // Replace comma with dot
+                    dataString = dataString.replace(',', '.');
+                    // Parse the float
+                    float f = Float.parseFloat(dataString);
                     if(dataListener != null) {
                         dataListener.onDataReceived(f);
                     }

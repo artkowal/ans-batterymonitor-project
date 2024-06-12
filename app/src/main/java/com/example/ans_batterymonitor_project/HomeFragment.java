@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void handleDataInFragment(float number) {
-        Log.d(TAG, String.valueOf(number));
+//        Log.d(TAG, String.valueOf(number));
         TextView voltageTextView = requireView().findViewById(R.id.voltageTextView);
         requireActivity().runOnUiThread(() -> {
             voltageTextView.setText(String.valueOf(number));
@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
             // Połączenie istnieje
 //            bluetoothLeService.sendMeasurementRequestStart(); - teraz wykonuje się automatycznie
 
-            // TODO przejście do 2. zakładki i rozpoczęcie pomiaru
+            ((MainActivity) requireActivity()).goToMeasurementAndStart();
         });
 
         updateUI(view);

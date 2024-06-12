@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/card_background"
+    android:padding="10dp"
+    android:layout_margin="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date:"
+            android:textColor="@color/main"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/formattedDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="11.03.2023"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/minLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Min:"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/minVoltageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="0.00v"
+            android:textColor="@color/yellow"
+            android:textStyle="bold"
+            android:layout_marginLeft="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time:"
+            android:textColor="@color/main"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/formattedTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="00:00:11"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/medLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Med:"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/movingAverageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00v"
+            android:textColor="@color/yellow"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:layout_marginLeft="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/maxLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Max:"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/maxVoltageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:gravity="end"
+            android:text="0.00v"
+            android:textColor="@color/yellow"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>
+
